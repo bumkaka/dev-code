@@ -8,7 +8,7 @@
  * @version     0.1
  * @author		By Bumkaka from modx.im
  * @internal    @properties 
- * @internal    @events OnParseDocument,OnWebPagePrerender
+ * @internal    @events OnWebPagePrerender
  * @internal	@properties 
  * @internal    @modx_category Manager and Admin
  * @internal    @installset base
