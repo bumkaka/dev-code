@@ -16,17 +16,25 @@
 $output = $modx->documentOutput;
 if ( strpos($output,'{--') === false ) return;
 $parts = explode('{--',$output);
-foreach($parts as $part){
-	$part = explode('--}', $part);
-	if ( count($part) > 1 ){
-		if ( !empty( $_SESSION['mgrValidated']) ) {
-			$part = implode('',$part);
-		} else {
-			$part = $part[1];
-		}
-	} else{
-		$part = $part[0];
+
+$_tmp = array();
+for($i = count($parts)-1;$i>0;$i-- ){
+	if ( strpos($parts[$i], '--}') !== false ){
+		$part = explode('--}', $parts[$i]);
+		$_tmp[0] = end( $part ) . $_tmp[0];
+		array_pop($part);
+		$_tmp = array_merge($part, $_tmp);
+	} else {
+		$_tmp[0] = $parts[$i] . $_tmp[0];
 	}
-	$out[] = $part;
+		
+	if ( !empty( $_SESSION['mgrValidated']) ) {
+		$_tmp[0] .= $_tmp[1];
+		unset( $_tmp[1]);
+		$_tmp = array_slice(  array_diff( $_tmp, array('') ),0) ;
+	} else {
+		array_shift($_tmp);
+	}
 }
-$modx->documentOutput = implode('',$out);
+
+$modx->documentOutput = $parts[0].implode('',$_tmp);
